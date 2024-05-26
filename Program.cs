@@ -16,7 +16,7 @@ internal class Program
         var loop = true;
         while (loop)
         {
-            //Input a Prevod zadaneho stringu na DateTime
+            //input a prevod zadaneho stringu na DateTime
             Console.WriteLine("Zadejte datum pro specificky kurzovni listek. Prosim zadejte datum ve formatu DD.MM.YYYY");
             string answerDate = Console.ReadLine();
 
@@ -26,14 +26,19 @@ internal class Program
             {
                 var currentUSDtoCZK = getExchangeRate(userDate);
 
+                //vsechny prihlasovaci udaje
                 using (SqlConnection connection =
                    new SqlConnection(
                        "Server=stbechyn-sql.database.windows.net;Database=AdventureWorksDW2020;User Id=prvniit;Password=P@ssW0rd!;"))
                 {
+                    //navazani spojeni
                     connection.Open();
 
+                    //zadani QUERY
                     using (SqlCommand command =
                            new SqlCommand("SELECT EnglishProductName, DealerPrice FROM DimProduct", connection))
+
+                           //precteni a zapsani vystupu z daneho QUERY do textoveho souboru
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         try
@@ -65,13 +70,13 @@ internal class Program
         var check = true;
         userDate = DateTime.Parse(date);
 
-            //Zjisteni jestli je datum validni
+            //zjisteni jestli je datum validni
             if (userDate > DateTime.Today)
             {
                 userDate = DateTime.Today;
             }
 
-            //Zjisteni jestli to je pracovni den nebo vikend
+            //zjisteni jestli to je pracovni den nebo vikend
             var dateChecker = Convert.ToInt32(userDate.DayOfWeek);
             if (dateChecker > 5)
             {
@@ -95,18 +100,19 @@ internal class Program
         var data = client.DownloadString("https://www.cnb.cz/cs/financni-trhy/devizovy-trh/kurzy-devizoveho-trhu/kurzy-devizoveho-trhu/rok.txt?rok=2024");
         var lines = data.Split('\n');
 
-        //Zjisteni indexu konverze USD na CZK
+        //zjisteni indexu konverze USD na CZK
         var firstLine = lines[0].Split('|');
 
         //Array.IndexOf firstLine, "1 USD"
         double currentUSDtoCZK = 0;
-        //Cyklus na nalezeni spravneho radku s aktualnima kurzama
+
+        //cyklus na nalezeni spravneho radku s aktualnima kurzama
         foreach (var line in lines)
         {
             var currentLine = line.Split('|');
             if (exchangeDate.ToString("dd.MM.yyyy") == currentLine[0])
             {
-                //Ziskani a zapsani kurzu USD na CZK
+                //ziskani a zapsani kurzu USD na CZK
                 currentUSDtoCZK = Convert.ToDouble(currentLine[Array.IndexOf(firstLine, "1 USD")]);
             }
         }
