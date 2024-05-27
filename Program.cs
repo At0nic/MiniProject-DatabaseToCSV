@@ -29,7 +29,7 @@ internal class Program
                 //vsechny prihlasovaci udaje
                 using (SqlConnection connection =
                    new SqlConnection(
-                       "Server=stbechyn-sql.database.windows.net;Database=AdventureWorksDW2020;User Id=prvniit;Password=P@ssW0rd!;"))
+                       "Server=##############;Database=##############;User Id=##############;Password=##############;"))
                 {
                     //navazani spojeni
                     connection.Open();
